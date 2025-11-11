@@ -1,11 +1,11 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const compression = require('compression');
-const mongoSanitize = require('express-mongo-sanitize');
-const hpp = require('hpp');
-const morgan = require('morgan');
-const path = require('path');
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
+const compression = require("compression");
+const mongoSanitize = require("express-mongo-sanitize");
+const hpp = require("hpp");
+const morgan = require("morgan");
+const path = require("path");
 const {
   generalLimiter,
   authLimiter,
@@ -15,29 +15,29 @@ const {
   speedLimiter,
   securityHeaders,
   requestSizeLimiter,
-  securityLogger
-} = require('./middleware/securityMiddleware');
+  securityLogger,
+} = require("./middleware/securityMiddleware");
 
 // Import routes
-const authRoutes = require('./routes/authRoutes');
-const examRoutes = require('./routes/examRoutes');
-const questionRoutes = require('./routes/questionRoutes');
-const resultRoutes = require('./routes/resultRoutes');
-const uploadRoutes = require('./routes/uploadRoutes');
-const analyticsRoutes = require('./routes/analyticsRoutes');
-const userRoutes = require('./routes/userRoutes');
+const authRoutes = require("./routes/authRoutes");
+const examRoutes = require("./routes/examRoutes");
+const questionRoutes = require("./routes/questionRoutes");
+const resultRoutes = require("./routes/resultRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
+const analyticsRoutes = require("./routes/analyticsRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 // Import middleware
-const { errorHandler, notFound } = require('./middleware/errorHandler');
-const logger = require('./config/logger');
+const { errorHandler, notFound } = require("./middleware/errorHandler");
+const logger = require("./config/logger");
 const allowedOrigins = [
-                 // for local dev
-  "https://ait-online-exam.vercel.app"       // for production frontend
+  // for local dev
+  "https://ait-online-exam.vercel.app", // for production frontend
 ];
 const app = express();
 
 // Trust proxy (for rate limiting behind reverse proxy)
-app.set('trust proxy', 1);
+app.set("trust proxy", 1);
 
 // Security headers
 app.use(securityHeaders);
@@ -49,48 +49,55 @@ app.use(securityLogger);
 app.use(requestSizeLimiter);
 
 // Helmet security middleware
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
-      scriptSrc: ["'self'"],
-      connectSrc: ["'self'"],
-      frameSrc: ["'none'"],
-      objectSrc: ["'none'"],
-      mediaSrc: ["'self'", "https://res.cloudinary.com"]
-    }
-  },
-  hsts: process.env.NODE_ENV === 'production' ? {
-    maxAge: 31536000,
-    includeSubDomains: true,
-    preload: true
-  } : false
-}));
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
+        scriptSrc: ["'self'"],
+        connectSrc: ["'self'"],
+        frameSrc: ["'none'"],
+        objectSrc: ["'none'"],
+        mediaSrc: ["'self'", "https://res.cloudinary.com"],
+      },
+    },
+    hsts:
+      process.env.NODE_ENV === "production"
+        ? {
+            maxAge: 31536000,
+            includeSubDomains: true,
+            preload: true,
+          }
+        : false,
+  })
+);
 
 // CORS configuration
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
 // Speed limiting
 app.use(speedLimiter);
 
 // General rate limiting
-app.use('/api/', generalLimiter);
+app.use("/api/", generalLimiter);
 
 // Body parsing middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // Compression middleware
 app.use(compression());
@@ -102,46 +109,48 @@ app.use(mongoSanitize());
 app.use(hpp());
 
 // Logging middleware
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
 } else {
-  app.use(morgan('combined', {
-    stream: {
-      write: (message) => logger.info(message.trim())
-    }
-  }));
+  app.use(
+    morgan("combined", {
+      stream: {
+        write: (message) => logger.info(message.trim()),
+      },
+    })
+  );
 }
 
 // Static files
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // Health check endpoint
-app.get('/health', (req, res) => {
+app.get("/health", (req, res) => {
   res.status(200).json({
     success: true,
-    message: 'Server is running',
+    message: "Server is running",
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV
+    environment: process.env.NODE_ENV,
   });
 });
 
 // API routes with specific rate limiting
-app.use('/api/auth', authLimiter, authRoutes);
-app.use('/api/exams', examLimiter, examRoutes);
-app.use('/api/questions', examLimiter, questionRoutes);
-app.use('/api/results', examLimiter, resultRoutes);
-app.use('/api/upload', uploadLimiter, uploadRoutes);
-app.use('/api/analytics', generalLimiter, analyticsRoutes);
-app.use('/api/users', generalLimiter, userRoutes);
+app.use("/api/auth", authLimiter, authRoutes);
+app.use("/api/exams", examLimiter, examRoutes);
+app.use("/api/questions", examLimiter, questionRoutes);
+app.use("/api/results", examLimiter, resultRoutes);
+app.use("/api/upload", uploadLimiter, uploadRoutes);
+app.use("/api/analytics", generalLimiter, analyticsRoutes);
+app.use("/api/users", generalLimiter, userRoutes);
 
 // Root endpoint
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: 'AIT Online Exam Platform API',
-    version: '1.0.0',
-    documentation: '/api/docs',
-    health: '/health'
+    message: "AIT Online Exam Platform API",
+    version: "1.0.0",
+    documentation: "/api/docs",
+    health: "/health",
   });
 });
 
@@ -152,13 +161,13 @@ app.use(notFound);
 app.use(errorHandler);
 
 // Graceful shutdown handling
-process.on('SIGTERM', () => {
-  logger.info('SIGTERM received. Shutting down gracefully...');
+process.on("SIGTERM", () => {
+  logger.info("SIGTERM received. Shutting down gracefully...");
   process.exit(0);
 });
 
-process.on('SIGINT', () => {
-  logger.info('SIGINT received. Shutting down gracefully...');
+process.on("SIGINT", () => {
+  logger.info("SIGINT received. Shutting down gracefully...");
   process.exit(0);
 });
 
