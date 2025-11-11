@@ -1,0 +1,303 @@
+[
+    {
+      "question": "Which of the following is the correct syntax of printf in C?",
+      "options": ["printf('Hello');", "printf('Hello')", "printf(\"Hello\");", "printf(Hello);"],
+      "answer": "printf(\"Hello\");"
+    },
+    {
+      "question": "Which data type is used to create a variable that should store text in C?",
+      "options": ["char", "string", "text", "word"],
+      "answer": "char"
+    },
+    {
+      "question": "What is the size of an `int` data type in C (on most modern systems)?",
+      "options": ["2 bytes", "4 bytes", "8 bytes", "Depends on compiler"],
+      "answer": "Depends on compiler"
+    },
+    {
+      "question": "Which symbol is used to denote a single-line comment in C?",
+      "options": ["//", "/* */", "#", "--"],
+      "answer": "//"
+    },
+    {
+      "question": "What is the primary purpose of the `scanf()` function?",
+      "options": ["To print output to the screen", "To read user input from the keyboard", "To perform mathematical calculations", "To declare a new variable"],
+      "answer": "To read user input from the keyboard"
+    },
+    {
+      "question": "Which header file is necessary for using input/output functions like `printf()` and `scanf()`?",
+      "options": ["<string.h>", "<math.h>", "<stdio.h>", "<stdlib.h>"],
+      "answer": "<stdio.h>"
+    },
+    {
+      "question": "How do you declare a constant variable in C?",
+      "options": ["const int my_num = 10;", "constant my_num = 10;", "int my_num = 10;", "let my_num = 10;"],
+      "answer": "const int my_num = 10;"
+    },
+    {
+      "question": "What is the correct way to end a C statement?",
+      "options": ["A comma (,)", "A colon (:)", "A semicolon (;)", "A period (.)"],
+      "answer": "A semicolon (;)"
+    },
+    {
+      "question": "What is a `while` loop used for?",
+      "options": ["To execute code a specific number of times", "To declare a new function", "To repeat a block of code as long as a condition is true", "To make a decision based on a condition"],
+      "answer": "To repeat a block of code as long as a condition is true"
+    },
+    {
+      "question": "How do you declare an array of 5 integers?",
+      "options": ["int myNumbers[5];", "array myNumbers[5];", "int[5] myNumbers;", "myNumbers = [5];"],
+      "answer": "int myNumbers[5];"
+    },
+    {
+      "question": "Which operator is used to get the remainder of a division?",
+      "options": ["/", "%", "*", "!"],
+      "answer": "%"
+    },
+    {
+      "question": "Which of the following is NOT a valid data type in C?",
+      "options": ["float", "long", "double", "decimal"],
+      "answer": "decimal"
+    },
+    {
+      "question": "What is the primary purpose of the `main()` function?",
+      "options": ["It's a function to print text", "It's the first function executed in a C program", "It's a function to perform calculations", "It's used to include header files"],
+      "answer": "It's the first function executed in a C program"
+    },
+    {
+      "question": "Which keyword is used to return a value from a function?",
+      "options": ["exit", "return", "break", "continue"],
+      "answer": "return"
+    },
+    {
+      "question": "What is a pointer in C?",
+      "options": ["A variable that stores a string", "A variable that stores an integer", "A variable that stores the memory address of another variable", "A variable that stores a floating-point number"],
+      "answer": "A variable that stores the memory address of another variable"
+    },
+    {
+      "question": "How do you free memory allocated with `malloc()`?",
+      "options": ["delete()", "remove()", "free()", "release()"],
+      "answer": "free()"
+    },
+    {
+      "question": "What does the `\\n` escape sequence do?",
+      "options": ["Creates a tab", "Creates a new line", "Creates a space", "Creates a backspace"],
+      "answer": "Creates a new line"
+    },
+    {
+      "question": "Which of these is a logical OR operator?",
+      "options": ["&&", "|", "||", "!"],
+      "answer": "||"
+    },
+    {
+      "question": "What is the purpose of the `if-else` statement?",
+      "options": ["To create a loop", "To declare a variable", "To make a decision based on a condition", "To define a function"],
+      "answer": "To make a decision based on a condition"
+    },
+    {
+      "question": "Which loop is guaranteed to execute at least once?",
+      "options": ["for loop", "while loop", "do-while loop", "All of the above"],
+      "answer": "do-while loop"
+    },
+    {
+      "question": "What is the correct way to include a header file named `myheader.h`?",
+      "options": ["#include <myheader.h>", "#include \"myheader.h\"", "include <myheader.h>", "import \"myheader.h\""],
+      "answer": "#include \"myheader.h\""
+    },
+    {
+      "question": "What is the output of `sizeof(char)`?",
+      "options": ["1 byte", "2 bytes", "4 bytes", "Depends on system"],
+      "answer": "1 byte"
+    },
+    {
+      "question": "Which operator is used to access the value at the address stored in a pointer?",
+      "options": ["&", "*", "->", "."],
+      "answer": "*"
+    },
+    {
+      "question": "How do you declare a structure named `Person`?",
+      "options": ["struct Person { ... };", "class Person { ... };", "create struct Person { ... };", "structure Person { ... };"],
+      "answer": "struct Person { ... };"
+    },
+    {
+      "question": "What is the purpose of the `break` statement in a loop?",
+      "options": ["To skip the current iteration", "To exit the loop entirely", "To continue to the next iteration", "To end the program"],
+      "answer": "To exit the loop entirely"
+    },
+    {
+      "question": "Which keyword is used to define a macro in C?",
+      "options": ["#define", "#macro", "#constant", "#create"],
+      "answer": "#define"
+    },
+    {
+      "question": "What is the purpose of the `const` keyword?",
+      "options": ["To make a variable a pointer", "To make a variable's value unchangeable", "To make a variable static", "To make a variable global"],
+      "answer": "To make a variable's value unchangeable"
+    },
+    {
+      "question": "What is the `else if` statement used for?",
+      "options": ["To define a new condition after a failed `if` check", "To perform an action if the `if` condition is true", "To create a loop", "To declare a function"],
+      "answer": "To define a new condition after a failed `if` check"
+    },
+    {
+      "question": "What is the default value of a global variable if not initialized?",
+      "options": ["0", "1", "A random value", "It's a compiler error"],
+      "answer": "0"
+    },
+    {
+      "question": "What is a `for` loop used for?",
+      "options": ["Executing code once", "Repeating code based on a condition", "Iterating a specific number of times", "Checking a condition"],
+      "answer": "Iterating a specific number of times"
+    },
+    {
+      "question": "Which operator is used to get the address of a variable?",
+      "options": ["*", "&", "->", "."],
+      "answer": "&"
+    },
+    {
+      "question": "Which of the following is an example of a preprocessor directive?",
+      "options": ["int x;", "#include <stdio.h>", "return 0;", "if (x > 0)"],
+      "answer": "#include <stdio.h>"
+    },
+    {
+      "question": "What is the purpose of the `sizeof` operator?",
+      "options": ["To get the size of a variable in bytes", "To get the value of a variable", "To check if a variable is empty", "To allocate memory"],
+      "answer": "To get the size of a variable in bytes"
+    },
+    {
+      "question": "What is the correct way to compare two strings in C?",
+      "options": ["if (string1 == string2)", "if (string1.equals(string2))", "strcmp(string1, string2) == 0", "compare(string1, string2)"],
+      "answer": "strcmp(string1, string2) == 0"
+    },
+    {
+      "question": "What is a `typedef` used for?",
+      "options": ["To create a new variable", "To define a new function", "To create a synonym for a data type", "To allocate memory"],
+      "answer": "To create a synonym for a data type"
+    },
+    {
+      "question": "Which function is used to write a single character to a file?",
+      "options": ["fputc()", "fprintf()", "fwrite()", "fgetc()"],
+      "answer": "fputc()"
+    },
+    {
+      "question": "What does the `\\0` character represent?",
+      "options": ["An empty character", "A null pointer", "The end of a string", "A space character"],
+      "answer": "The end of a string"
+    },
+    {
+      "question": "What is a `do-while` loop?",
+      "options": ["A loop that executes until a condition is false", "A loop that executes a block of code at least once, then checks the condition", "A loop that only executes once", "A loop that executes forever"],
+      "answer": "A loop that executes a block of code at least once, then checks the condition"
+    },
+    {
+      "question": "What is the correct way to allocate dynamic memory for an integer?",
+      "options": ["int *ptr = (int*)malloc(sizeof(int));", "int *ptr = new int;", "int ptr = malloc(sizeof(int));", "allocate(int);"],
+      "answer": "int *ptr = (int*)malloc(sizeof(int));"
+    },
+    {
+      "question": "What is the correct way to declare an integer pointer?",
+      "options": ["int ptr;", "*int ptr;", "int *ptr;", "int& ptr;"],
+      "answer": "int *ptr;"
+    },
+    {
+      "question": "What is the purpose of the `void` keyword in a function prototype?",
+      "options": ["It means the function returns an integer", "It means the function takes no arguments", "It means the function returns no value", "It means the function is a pointer"],
+      "answer": "It means the function returns no value"
+    },
+    {
+      "question": "What is the correct way to pass an array to a function?",
+      "options": ["func(arr[]);", "func(arr);", "func(&arr);", "func(*arr);"],
+      "answer": "func(arr);"
+    },
+    {
+      "question": "Which operator is used to get the size of an array?",
+      "options": ["size()", "sizeof()", "length()", "arr_size()"],
+      "answer": "sizeof()"
+    },
+    {
+      "question": "What is the purpose of `gets()`?",
+      "options": ["To read a character from the keyboard", "To read a line of text from the keyboard", "To print a line of text", "To read a number from the keyboard"],
+      "answer": "To read a line of text from the keyboard"
+    },
+    {
+      "question": "Which of the following is a logical AND operator?",
+      "options": ["||", "&", "&&", "!"],
+      "answer": "&&"
+    },
+    {
+      "question": "How do you define a function that takes no arguments and returns a value?",
+      "options": ["int myfunc(void);", "int myfunc();", "void myfunc(void);", "void myfunc();"],
+      "answer": "int myfunc(void);"
+    },
+    {
+      "question": "Which of these is a bitwise AND operator?",
+      "options": ["&&", "&", "||", "|"],
+      "answer": "&"
+    },
+    {
+      "question": "What is the value of `x` after `int x = 5; x++;`?",
+      "options": ["4", "5", "6", "Compiler error"],
+      "answer": "6"
+    },
+    {
+      "question": "What is the correct way to access a member of a structure using a pointer?",
+      "options": ["ptr.member", "*ptr.member", "ptr->member", "ptr:member"],
+      "answer": "ptr->member"
+    },
+    {
+      "question": "Which function is used to allocate a block of memory and initialize all its bits to zero?",
+      "options": ["calloc()", "malloc()", "realloc()", "free()"],
+      "answer": "calloc()"
+    },
+    {
+      "question": "What is the `continue` statement used for in a loop?",
+      "options": ["To exit the loop", "To skip the current iteration and proceed to the next", "To stop the program", "To restart the loop from the beginning"],
+      "answer": "To skip the current iteration and proceed to the next"
+    },
+    {
+      "question": "What does the `%s` format specifier in `printf()` stand for?",
+      "options": ["Integer", "Floating-point number", "Character", "String"],
+      "answer": "String"
+    },
+    {
+      "question": "What is the output of `(5 > 3) ? 10 : 20;`?",
+      "options": ["10", "20", "true", "false"],
+      "answer": "10"
+    },
+    {
+      "question": "Which of the following is the correct way to comment out multiple lines of code?",
+      "options": ["// comment //", "# comment #", "/* comment */", "-- comment --"],
+      "answer": "/* comment */"
+    },
+    {
+      "question": "What is an `enum` in C?",
+      "options": ["A user-defined data type for strings", "A user-defined data type for integer constants", "A user-defined data type for floating-point numbers", "A type of loop"],
+      "answer": "A user-defined data type for integer constants"
+    },
+    {
+      "question": "How do you read a single character from the keyboard?",
+      "options": ["scanf(\"%c\", &c);", "getc();", "readc();", "getchar();"],
+      "answer": "getchar();"
+    },
+    {
+      "question": "Which function is used to copy one string to another?",
+      "options": ["strcopy()", "strcpy()", "copy_string()", "string_move()"],
+      "answer": "strcpy()"
+    },
+    {
+      "question": "What is the purpose of `realloc()`?",
+      "options": ["To free a block of memory", "To initialize memory to zero", "To resize a block of previously allocated memory", "To create a new block of memory"],
+      "answer": "To resize a block of previously allocated memory"
+    },
+    {
+      "question": "What is the correct way to declare a function `sum` that takes two integers and returns their sum?",
+      "options": ["int sum(int a, int b);", "sum(int a, int b);", "function int sum(int a, int b);", "int sum(int, int);"],
+      "answer": "int sum(int a, int b);"
+    },
+    {
+      "question": "What is the output of `printf(\"%f\", 12.34);`?",
+      "options": ["12.34", "12.340000", "12", "Compiler error"],
+      "answer": "12.340000"
+    }
+  ]
+  
