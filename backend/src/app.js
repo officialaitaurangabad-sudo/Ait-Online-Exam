@@ -30,7 +30,10 @@ const userRoutes = require('./routes/userRoutes');
 // Import middleware
 const { errorHandler, notFound } = require('./middleware/errorHandler');
 const logger = require('./config/logger');
-
+const allowedOrigins = [
+                 // for local dev
+  "https://ait-online-exam.vercel.app"       // for production frontend
+];
 const app = express();
 
 // Trust proxy (for rate limiting behind reverse proxy)
@@ -69,11 +72,14 @@ app.use(helmet({
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-CSRF-Token'],
-  exposedHeaders: ['X-Total-Count', 'X-Page-Count']
 }));
 
 // Speed limiting
