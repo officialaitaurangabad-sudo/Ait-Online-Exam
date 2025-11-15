@@ -32,7 +32,7 @@ const { errorHandler, notFound } = require("./middleware/errorHandler");
 const logger = require("./config/logger");
 const allowedOrigins = [
   // for local dev
-  "https://ait-online-exam.vercel.app", // for production frontend
+  "http://46.37.122.240:3000", // for production frontend
 ];
 const app = express();
 
