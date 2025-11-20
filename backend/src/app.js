@@ -30,10 +30,19 @@ const userRoutes = require("./routes/userRoutes");
 // Import middleware
 const { errorHandler, notFound } = require("./middleware/errorHandler");
 const logger = require("./config/logger");
+
+// CORS allowed origins from environment variables
 const allowedOrigins = [
-  // for local dev
-  "http://46.37.122.240:3000", // for production frontend
-];
+  process.env.CORS_ORIGIN || "http://localhost:5173",
+  process.env.CLIENT_URL || "http://localhost:5173",
+  // Add common development origins
+  "http://localhost:5173",
+  "http://localhost:3000",
+  // Add VPS frontend URL (with both common ports)
+  "http://46.37.122.240:5173",
+  "http://46.37.122.240:3000",
+].filter(Boolean); // Remove any undefined values
+
 const app = express();
 
 // Trust proxy (for rate limiting behind reverse proxy)
