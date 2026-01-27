@@ -28,10 +28,19 @@ const userRoutes = require("./routes/userRoutes");
 // Import middleware
 const { errorHandler, notFound } = require("./middleware/errorHandler");
 const logger = require("./config/logger");
+
+// CORS allowed origins from environment variables
 const allowedOrigins = [
-  // for local dev
-  "https://ait-online-exam.vercel.app", // for production frontend
-];
+  process.env.CORS_ORIGIN || "http://localhost:5173",
+  process.env.CLIENT_URL || "http://localhost:5173",
+  // Add common development origins
+  "http://localhost:5173",
+  "http://localhost:3000",
+  // Add VPS frontend URL (with both common ports)
+  "http://46.37.122.240:5173",
+  "http://46.37.122.240:3000",
+].filter(Boolean); // Remove any undefined values
+
 const app = express();
 
 // Trust proxy (for rate limiting behind reverse proxy)
@@ -77,13 +86,27 @@ app.use(
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) {
+        return callback(null, true);
       }
+      
+      // Check if origin is in allowed list
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      
+      // Log for debugging
+      logger.warn(`CORS blocked origin: ${origin}`);
+      logger.info(`Allowed origins: ${allowedOrigins.join(', ')}`);
+      
+      callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    exposedHeaders: ['Authorization'],
+    maxAge: 86400, // 24 hours
   })
 );
 

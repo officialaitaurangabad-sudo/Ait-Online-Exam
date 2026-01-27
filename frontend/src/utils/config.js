@@ -1,7 +1,7 @@
 // Environment configuration
 export const config = {
   // API Configuration
-  API_URL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  API_URL: import.meta.env.VITE_API_URL || 'http://46.37.122.240:5000/api',
   APP_NAME: import.meta.env.VITE_APP_NAME || 'AIT Online Exam Platform',
   APP_VERSION: import.meta.env.VITE_APP_VERSION || '1.0.0',
   
