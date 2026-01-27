@@ -8,10 +8,8 @@ const morgan = require("morgan");
 const path = require("path");
 const {
   generalLimiter,
-  authLimiter,
   examLimiter,
   uploadLimiter,
-  passwordResetLimiter,
   speedLimiter,
   securityHeaders,
   requestSizeLimiter,
@@ -135,7 +133,7 @@ app.get("/health", (req, res) => {
 });
 
 // API routes with specific rate limiting
-app.use("/api/auth", authLimiter, authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/exams", examLimiter, examRoutes);
 app.use("/api/questions", examLimiter, questionRoutes);
 app.use("/api/results", examLimiter, resultRoutes);
