@@ -211,6 +211,8 @@ const updateExam = asyncHandler(async (req, res) => {
     const allowedUpdates = [
       'title',
       'description',
+      'subject',
+      'category',
       'instructions',
       'endDate',
       'allowedAttempts',
