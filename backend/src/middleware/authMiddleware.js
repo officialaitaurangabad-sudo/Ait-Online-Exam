@@ -42,15 +42,6 @@ const authenticateToken = async (req, res, next) => {
       });
     }
 
-    // Check if account is locked
-    if (user.isLocked) {
-      console.log('authenticateToken - User account locked');
-      return res.status(401).json({
-        success: false,
-        message: 'Account is temporarily locked due to multiple failed login attempts'
-      });
-    }
-
     req.user = user;
     console.log('authenticateToken - Authentication successful');
     next();
@@ -126,7 +117,7 @@ const optionalAuth = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const user = await User.findById(decoded.userId).select('-password');
       
-      if (user && user.isActive && !user.isLocked) {
+      if (user && user.isActive) {
         req.user = user;
       }
     }
@@ -165,39 +156,6 @@ const checkOwnership = (resourceUserIdField = 'createdBy') => {
 
     next();
   };
-};
-
-// Rate limiting for authentication endpoints
-const authRateLimit = (req, res, next) => {
-  const key = `auth_${req.ip}`;
-  const windowMs = 15 * 60 * 1000; // 15 minutes
-  const maxAttempts = 5;
-
-  // This would typically use a Redis store or similar
-  // For now, we'll implement a simple in-memory store
-  if (!global.authAttempts) {
-    global.authAttempts = new Map();
-  }
-
-  const now = Date.now();
-  const attempts = global.authAttempts.get(key) || { count: 0, resetTime: now + windowMs };
-
-  if (now > attempts.resetTime) {
-    attempts.count = 0;
-    attempts.resetTime = now + windowMs;
-  }
-
-  attempts.count++;
-
-  if (attempts.count > maxAttempts) {
-    return res.status(429).json({
-      success: false,
-      message: 'Too many authentication attempts. Please try again later.'
-    });
-  }
-
-  global.authAttempts.set(key, attempts);
-  next();
 };
 
 // Verify refresh token
@@ -267,6 +225,5 @@ module.exports = {
   requireStudent,
   optionalAuth,
   checkOwnership,
-  authRateLimit,
   verifyRefreshToken
 };

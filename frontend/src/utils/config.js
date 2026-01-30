@@ -1,7 +1,14 @@
 // Environment configuration
+// Normalize API URL: no trailing slash (avoids double slashes); ensure /api so paths like /auth/login resolve to /api/auth/login
+const rawApiUrl = import.meta.env.VITE_API_URL 
+let normalizedApiUrl = typeof rawApiUrl === 'string' ? rawApiUrl.replace(/\/+$/, '') : rawApiUrl
+if (typeof normalizedApiUrl === 'string' && normalizedApiUrl && !/\/api\/?$/.test(normalizedApiUrl)) {
+  normalizedApiUrl = normalizedApiUrl + '/api'
+}
+
 export const config = {
-  // API Configuration
-  API_URL: import.meta.env.VITE_API_URL || 'http://46.37.122.240:5000/api',
+  // API Configuration (base must end with /api, no trailing slash)
+  API_URL: normalizedApiUrl,
   APP_NAME: import.meta.env.VITE_APP_NAME || 'AIT Online Exam Platform',
   APP_VERSION: import.meta.env.VITE_APP_VERSION || '1.0.0',
   

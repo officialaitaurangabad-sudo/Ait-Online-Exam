@@ -79,11 +79,6 @@ const login = asyncHandler(async (req, res) => {
     throw new AppError('Invalid credentials', 401);
   }
 
-  // Check if account is locked
-  if (user.isLocked) {
-    throw new AppError('Account is temporarily locked due to multiple failed login attempts', 401);
-  }
-
   // Check if account is active
   if (!user.isActive) {
     throw new AppError('Account is deactivated', 401);
@@ -94,13 +89,8 @@ const login = asyncHandler(async (req, res) => {
   const isPasswordValid = await user.comparePassword(password);
   console.log('Password valid:', isPasswordValid);
   if (!isPasswordValid) {
-    // Increment login attempts
-    await user.incLoginAttempts();
     throw new AppError('Invalid credentials', 401);
   }
-
-  // Reset login attempts on successful login
-  await user.resetLoginAttempts();
 
   // Update last login
   user.lastLogin = new Date();

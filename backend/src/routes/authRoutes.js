@@ -13,7 +13,7 @@ const {
   resendVerification,
   deleteAccount
 } = require('../controllers/authController');
-const { authenticateToken, authRateLimit } = require('../middleware/authMiddleware');
+const { authenticateToken } = require('../middleware/authMiddleware');
 const { body } = require('express-validator');
 
 const router = express.Router();
@@ -51,10 +51,10 @@ const verifyEmailValidation = [
 ];
 
 // Public routes
-router.post('/register', authRateLimit, registerValidation, register);
-router.post('/login', authRateLimit, loginValidation, login);
+router.post('/register', registerValidation, register);
+router.post('/login', loginValidation, login);
 router.post('/refresh', refreshToken);
-router.post('/forgot-password', authRateLimit, forgotPasswordValidation, forgotPassword);
+router.post('/forgot-password', forgotPasswordValidation, forgotPassword);
 router.post('/reset-password', resetPasswordValidation, resetPassword);
 router.post('/verify-email', verifyEmailValidation, verifyEmail);
 
