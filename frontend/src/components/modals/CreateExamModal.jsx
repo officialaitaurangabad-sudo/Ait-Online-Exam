@@ -259,16 +259,19 @@ const CreateExamModal = ({ isOpen, onClose }) => {
   }
 
   const subjects = [
-    'Mathematics',
-    'Physics',
-    'Chemistry',
-    'Biology',
-    'English',
-    'Computer Science',
-    'History',
-    'Geography',
-    'Economics',
-    'Other'
+    'C',
+    'C++',
+    'ASP.NET',
+    'MVC',
+    'PHP',
+    'HTML 5',
+    'CSS',
+    'Bootstrap',
+    'JavaScript',
+    'Angular JS',
+    'MongoDB',
+    'Node.js',
+    'React'
   ]
 
   return (

@@ -1,15 +1,32 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Plus, Edit, Trash2, Eye, Upload, Download, RefreshCw, Search, Filter } from 'lucide-react'
+import { Plus, Edit, Trash2, Eye, Upload, Download, RefreshCw, Search, Filter, ArrowLeft, BookOpen } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/Card'
 import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
+import Pagination from '../../components/ui/Pagination'
 import CreateQuestionModal from '../../components/modals/CreateQuestionModal'
 import ViewQuestionModal from '../../components/modals/ViewQuestionModal'
 import EditQuestionModal from '../../components/modals/EditQuestionModal'
 import BulkUploadModal from '../../components/modals/BulkUploadModal'
 import useQuestionStore from '../../store/useQuestionStore'
 import { toast } from 'react-toastify'
+
+const SUBJECTS = [
+  'C',
+  'C++',
+  'ASP.NET',
+  'MVC',
+  'PHP',
+  'HTML 5',
+  'CSS',
+  'Bootstrap',
+  'JavaScript',
+  'Angular JS',
+  'MongoDB',
+  'Node.js',
+  'React'
+]
 
 const ManageQuestions = () => {
   // State for modals
@@ -19,6 +36,8 @@ const ManageQuestions = () => {
   const [showBulkUploadModal, setShowBulkUploadModal] = useState(false)
   const [selectedQuestion, setSelectedQuestion] = useState(null)
   const [isRefreshing, setIsRefreshing] = useState(false)
+  // When null, show subject list; when set, show questions for that subject
+  const [selectedSubject, setSelectedSubject] = useState(null)
 
   // Get data from store
   const { 
@@ -36,14 +55,21 @@ const ManageQuestions = () => {
     exportQuestions,
     setFilters,
     setPagination,
+    setSubjectAndFetch,
     resetFilters,
+    resetFiltersWithoutFetch,
     clearError
   } = useQuestionStore()
 
-  // Fetch questions on component mount
-  useEffect(() => {
-    fetchQuestions()
-  }, [])
+  const handleSelectSubject = (subject) => {
+    setSelectedSubject(subject)
+    setSubjectAndFetch(subject)
+  }
+
+  const handleBackToSubjects = () => {
+    setSelectedSubject(null)
+    resetFiltersWithoutFetch()
+  }
 
   const handleSearchChange = (value) => {
     setFilters({ search: value })
@@ -134,14 +160,57 @@ const ManageQuestions = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
+        {/* Subject selection view (initial) */}
+        {!selectedSubject ? (
+          <>
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Manage Questions
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">
+                Select a subject to view and manage its question bank.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {SUBJECTS.map((subject, index) => (
+                <motion.button
+                  key={subject}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.03 }}
+                  onClick={() => handleSelectSubject(subject)}
+                  className="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-blue-500 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 text-left"
+                >
+                  <BookOpen className="h-10 w-10 text-blue-600 dark:text-blue-400 mb-3" />
+                  <span className="font-medium text-gray-900 dark:text-white text-center text-sm sm:text-base">
+                    {subject}
+                  </span>
+                </motion.button>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+        {/* Questions view: header with back button */}
         <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-black">
-              Manage Questions
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">
-              Create, edit, and organize your question bank. {totalItems} questions available.
-            </p>
+          <div className="flex items-center gap-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleBackToSubjects}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to subjects
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                {selectedSubject}
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">
+                {totalItems} questions in this subject. Use filters and search below.
+              </p>
+            </div>
           </div>
           <div className="flex space-x-2">
             <Button 
@@ -194,7 +263,7 @@ const ManageQuestions = () => {
           </div>
         )}
 
-        {/* Filter and Search */}
+        {/* Filter and Search (subject is fixed when one is selected) */}
         <div className="mb-6 flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
             <div className="relative">
@@ -210,22 +279,9 @@ const ManageQuestions = () => {
           </div>
           <div className="flex space-x-2">
             <select 
-              value={filters.subject}
-              onChange={(e) => handleFilterChange('subject', e.target.value)}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-blue-800 text-gray-900 dark:text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="">All Subjects</option>
-              <option value="C Programming">C Programming</option>
-              <option value="Mathematics">Mathematics</option>
-              <option value="Physics">Physics</option>
-              <option value="Chemistry">Chemistry</option>
-              <option value="Biology">Biology</option>
-              <option value="Computer Science">Computer Science</option>
-            </select>
-            <select 
               value={filters.questionType}
               onChange={(e) => handleFilterChange('questionType', e.target.value)}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-blue-800 text-gray-900 dark:text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">All Types</option>
               <option value="multiple-choice">Multiple Choice</option>
@@ -236,7 +292,7 @@ const ManageQuestions = () => {
             <select 
               value={filters.difficulty}
               onChange={(e) => handleFilterChange('difficulty', e.target.value)}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-blue-800 text-gray-900 dark:text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">All Difficulty</option>
               <option value="easy">Easy</option>
@@ -247,7 +303,7 @@ const ManageQuestions = () => {
               <Button
                 variant="outline"
                 onClick={handleClearFilters}
-                className="text-gray-600 hover:text-gray-800"
+                className="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white"
               >
                 Clear Filters
               </Button>
@@ -278,7 +334,7 @@ const ManageQuestions = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-blue-800 transition-colors"
+                    className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                   >
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
@@ -297,7 +353,7 @@ const ManageQuestions = () => {
                           </span>
                         )}
                       </div>
-                      <h3 className="text-lg font-medium text-gray-900 dark:text-black mb-1">
+                      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">
                         {question.questionText}
                       </h3>
                       <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
@@ -339,10 +395,10 @@ const ManageQuestions = () => {
               </div>
             ) : (
               <div className="text-center py-12">
-                <div className="w-16 h-16 bg-gray-100 dark:bg-blue-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Plus className="h-8 w-8 text-gray-400" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-black mb-2">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                   {filters.search || filters.subject || filters.questionType || filters.difficulty 
                     ? 'No questions match your filters' 
                     : 'No questions found'
@@ -378,7 +434,20 @@ const ManageQuestions = () => {
               </div>
             )}
           </CardContent>
+          {currentQuestions.length > 0 && totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={(page) => setPagination(page, itemsPerPage)}
+              itemsPerPage={itemsPerPage}
+              totalItems={totalItems}
+              onItemsPerPageChange={(limit) => setPagination(1, limit)}
+            />
+          )}
         </Card>
+
+          </>
+        )}
 
       </motion.div>
 

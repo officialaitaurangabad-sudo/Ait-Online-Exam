@@ -31,6 +31,15 @@ const useQuestionStore = create(
         get().fetchQuestions()
       },
 
+      // Set subject and reset to page 1, then fetch (single request when selecting subject)
+      setSubjectAndFetch: (subject) => {
+        set({
+          filters: { ...get().filters, subject },
+          currentPage: 1
+        })
+        get().fetchQuestions()
+      },
+
       setPagination: (page, limit) => {
         set({ currentPage: page, itemsPerPage: limit })
         get().fetchQuestions()
@@ -255,6 +264,23 @@ const useQuestionStore = create(
           currentPage: 1
         })
         get().fetchQuestions()
+      },
+
+      // Clear filters and subject without fetching (e.g. when returning to subject list)
+      resetFiltersWithoutFetch: () => {
+        set({
+          filters: {
+            search: '',
+            subject: '',
+            questionType: '',
+            difficulty: '',
+            isActive: true
+          },
+          currentPage: 1,
+          currentQuestions: [],
+          totalItems: 0,
+          totalPages: 0
+        })
       }
     }),
     {

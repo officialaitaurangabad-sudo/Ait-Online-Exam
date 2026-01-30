@@ -102,11 +102,19 @@ const ManageExams = () => {
       key: 'subject',
       label: 'Subject',
       options: [
-        { value: 'Mathematics', label: 'Mathematics' },
-        { value: 'Physics', label: 'Physics' },
-        { value: 'Chemistry', label: 'Chemistry' },
-        { value: 'Biology', label: 'Biology' },
-        { value: 'English', label: 'English' }
+        { value: 'C', label: 'C' },
+        { value: 'C++', label: 'C++' },
+        { value: 'ASP.NET', label: 'ASP.NET' },
+        { value: 'MVC', label: 'MVC' },
+        { value: 'PHP', label: 'PHP' },
+        { value: 'HTML 5', label: 'HTML 5' },
+        { value: 'CSS', label: 'CSS' },
+        { value: 'Bootstrap', label: 'Bootstrap' },
+        { value: 'JavaScript', label: 'JavaScript' },
+        { value: 'Angular JS', label: 'Angular JS' },
+        { value: 'MongoDB', label: 'MongoDB' },
+        { value: 'Node.js', label: 'Node.js' },
+        { value: 'React', label: 'React' }
       ]
     }
   ]
