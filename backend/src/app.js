@@ -33,19 +33,17 @@ const logger = require("./config/logger");
 
 // CORS allowed origins from environment variables
 const allowedOrigins = [
-  process.env.CORS_ORIGIN || "http://localhost:5173",
-  process.env.CLIENT_URL || "http://localhost:5173",
-  // Add common development origins
-  "http://localhost:5173",
-  "http://localhost:3000",
-  // Add VPS frontend URL (with both common ports)
-  "http://46.37.122.240:5173",
-  "http://46.37.122.240:3000",
-].filter(Boolean); // Remove any undefined values
+  process.env.CORS_ORIGIN || "http://localhost:5173",    // Frontend URL (from .env or default)
+  process.env.CLIENT_URL || "http://localhost:5173",    // Client URL (default or from env)
+  "http://localhost:5173",                               // Local development frontend port
+  "http://localhost:3000",                               // Local frontend port
+  "http://46.37.122.240:5173",                          // VPS frontend URL (with port 5173)
+  "http://46.37.122.240:3000",                          // VPS frontend URL (with port 3000)
+].filter(Boolean); // Filter out any undefined/null values
 
 const app = express();
 
-// Trust proxy (for rate limiting behind reverse proxy)
+// Trust proxy (for rate limiting behind reverse proxy like Nginx)
 app.set("trust proxy", 1);
 
 // Security headers
@@ -88,36 +86,40 @@ app.use(
 app.use(
   cors({
     origin: function (origin, callback) {
+      console.log(`Received CORS request from origin: ${origin}`); // For debugging
       if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
+        callback(null, true);  // Allow the request
       } else {
-        callback(new Error("Not allowed by CORS"));
+        callback(new Error("Not allowed by CORS"));  // Reject the request
       }
     },
-    credentials: true,
+    credentials: true,  // Allow cookies (if needed)
   })
 );
+
+// Handle preflight OPTIONS requests globally for all routes
+app.options("*", cors());  // Allow preflight requests for all routes
 
 // Speed limiting
 app.use(speedLimiter);
 
-// General rate limiting
+// General rate limiting for API
 app.use("/api/", generalLimiter);
 
-// Body parsing middleware
+// Body parsing middleware (for parsing JSON and URL-encoded requests)
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Compression middleware
+// Compression middleware for reducing response sizes
 app.use(compression());
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
 
-// Prevent parameter pollution
+// Prevent HTTP parameter pollution (e.g., ?foo=bar&foo=baz)
 app.use(hpp());
 
-// Logging middleware
+// Logging middleware (morgan)
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 } else {
@@ -130,7 +132,7 @@ if (process.env.NODE_ENV === "development") {
   );
 }
 
-// Static files
+// Serve static files (uploads)
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // Health check endpoint
@@ -152,7 +154,7 @@ app.use("/api/upload", uploadLimiter, uploadRoutes);
 app.use("/api/analytics", generalLimiter, analyticsRoutes);
 app.use("/api/users", generalLimiter, userRoutes);
 
-// Root endpoint
+// Root endpoint (API information)
 app.get("/", (req, res) => {
   res.json({
     success: true,
@@ -163,13 +165,13 @@ app.get("/", (req, res) => {
   });
 });
 
-// 404 handler
+// 404 handler (in case the route does not exist)
 app.use(notFound);
 
-// Global error handler
+// Global error handler (to handle errors)
 app.use(errorHandler);
 
-// Graceful shutdown handling
+// Graceful shutdown handling (for SIGTERM and SIGINT)
 process.on("SIGTERM", () => {
   logger.info("SIGTERM received. Shutting down gracefully...");
   process.exit(0);
